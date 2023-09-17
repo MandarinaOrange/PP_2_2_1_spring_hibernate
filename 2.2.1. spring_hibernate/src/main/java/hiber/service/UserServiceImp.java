@@ -26,4 +26,12 @@ public class UserServiceImp implements UserService {
       return userDao.listUsers();
    }
 
+   @Transactional(readOnly = true)
+   @Override
+   public List<User> findUser(String sign, String firstName) {return userDao.findUser(sign, firstName);}
+
+   @Transactional
+   @Override
+   public void deleteAll() {userDao.deleteAll();}
+
 }
