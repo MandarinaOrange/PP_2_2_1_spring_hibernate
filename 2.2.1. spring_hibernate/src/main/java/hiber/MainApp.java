@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-import static hiber.model.User.showUsers;
+
 
 public class MainApp {
    public static void main(String[] args) throws SQLException {
@@ -20,13 +20,21 @@ public class MainApp {
 
       UserService userService = context.getBean(UserService.class);
 
-      /*userService.add(new User("User1", "Lastname1", "user1@mail.ru"));
-      userService.add(new User("User2", "Lastname2", "user2@mail.ru", new Car("toyota", "rav4"));
+      userService.add(new User("User1", "Lastname1", "user1@mail.ru"));
+      userService.add(new User("User2", "Lastname2", "user2@mail.ru", new Car("toyota", "rav4")));
       userService.add(new User("User3", "Lastname3", "user3@mail.ru", new Car("mersedes", "benzzzz")));
-      userService.add(new User("User4", "Lastname4", "user4@mail.ru", new Car("mitsibishi", "autlander")));*/
+      userService.add(new User("User4", "Lastname4", "user4@mail.ru", new Car("mitsibishi", "autlander")));
+
+      List<User> users = userService.findUser("toyota", "rav4");
+
+      userService.showUsers(users);
 
 
-      int comand = 1;
+      //userService.deleteUser(2);
+
+
+
+      /*int comand = 1;
       String firstName, secondName, email, carModel, carSeries, sign;
       Scanner keyboard = new Scanner(System.in);
       while (comand != 0) {
@@ -78,7 +86,7 @@ public class MainApp {
          }
 
 
-      }
+      }*/
 
 
       context.close();

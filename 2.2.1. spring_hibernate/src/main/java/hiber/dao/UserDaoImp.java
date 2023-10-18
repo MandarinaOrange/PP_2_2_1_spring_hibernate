@@ -32,28 +32,12 @@ public class UserDaoImp implements UserDao {
 
    @Override
    @SuppressWarnings("unchecked")
-   public List<User> findUser(String sign, String firstName) {
+   public List<User> findUser(String model, String series) {
 
       List<User> foundUsers = null;
 
-      if (sign.equals("lastName") || sign.equals("firstName") || sign.equals("email")){
-         TypedQuery<User> findSignQuery = sessionFactory.getCurrentSession()
-                 .createQuery("from User where " + sign + " = :"+ sign)
-                 .setParameter(sign, firstName);
-         foundUsers = findSignQuery.getResultList();
-      } else if (sign.equals("id")) {
-         long id = Long.parseLong(firstName);
-         TypedQuery<User> findSignQuery = sessionFactory.getCurrentSession()
-                 .createQuery("from User where " + sign + " = :"+ sign)
-                 .setParameter(sign, id);
-         foundUsers = findSignQuery.getResultList();
-      } else if (sign.equals("car")) {
-         Scanner scan = new Scanner(System.in);
-         System.out.println("Enter the series: ");
-         String series = scan.nextLine();
-
          TypedQuery<Car> findCarQuery = sessionFactory.getCurrentSession().createQuery("from Car where model = :model and series = :series")
-                 .setParameter("model", firstName)
+                 .setParameter("model", model)
                  .setParameter("series", series);
          List<Car> findCarList = findCarQuery.getResultList();
 
@@ -73,7 +57,7 @@ public class UserDaoImp implements UserDao {
             }
             return foundUsers;
          }
-      }
+
 
 
       return foundUsers;
@@ -85,6 +69,13 @@ public class UserDaoImp implements UserDao {
       deleteQuery.executeUpdate();
       deleteQuery = sessionFactory.getCurrentSession()
               .createQuery("delete from Car");
+      deleteQuery.executeUpdate();
+   }
+
+   @Override
+   public void deleteUser(int id) {
+
+      Query deleteQuery = sessionFactory.getCurrentSession().createQuery("delete from User where id =:" + id).setParameter(id, id);
       deleteQuery.executeUpdate();
    }
 

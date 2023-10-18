@@ -86,22 +86,5 @@ public class User {
 
 
 
-   public static void showUsers(List<User> listUsers) {
 
-      if (listUsers != null) {
-         System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~");
-         for (User user : listUsers) {
-            System.out.println("Id = "+user.getId());
-            System.out.println("First Name = "+user.getFirstName());
-            System.out.println("Last Name = "+user.getLastName());
-            System.out.println("Email = "+user.getEmail());
-            System.out.println("Car: " + user.getCar());
-
-            System.out.println();
-         }
-      } else {
-         System.out.println("~~~~No Users!~~~~");
-      }
-
-   }
 }
