@@ -2,6 +2,8 @@ package hiber.dao;
 
 import hiber.model.Car;
 import hiber.model.User;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +22,16 @@ public class UserDaoImp implements UserDao {
 
    @Override
    public void add(User user) {
+
       sessionFactory.getCurrentSession().save(user);
+
    }
 
    @Override
    @SuppressWarnings("unchecked")
    public List<User> listUsers() {
       TypedQuery<User> query=sessionFactory.getCurrentSession().createQuery("from User");
+
       return query.getResultList();
    }
 
@@ -36,7 +41,9 @@ public class UserDaoImp implements UserDao {
 
       List<User> foundUsers = null;
 
-         TypedQuery<Car> findCarQuery = sessionFactory.getCurrentSession().createQuery("from Car where model = :model and series = :series")
+      Session session = sessionFactory.openSession();
+
+         TypedQuery<Car> findCarQuery = session.createQuery("from Car where model = :model and series = :series")
                  .setParameter("model", model)
                  .setParameter("series", series);
          List<Car> findCarList = findCarQuery.getResultList();
@@ -58,12 +65,13 @@ public class UserDaoImp implements UserDao {
             return foundUsers;
          }
 
-
+      session.getTransaction().commit();
 
       return foundUsers;
    }
 
    public void deleteAll() {
+
       Query deleteQuery = sessionFactory.getCurrentSession()
               .createQuery("delete from User");
       deleteQuery.executeUpdate();
@@ -74,9 +82,32 @@ public class UserDaoImp implements UserDao {
 
    @Override
    public void deleteUser(int id) {
+      Session session = sessionFactory.getCurrentSession();
 
-      Query deleteQuery = sessionFactory.getCurrentSession().createQuery("delete from User where id =:" + id).setParameter("id", id);
-      deleteQuery.executeUpdate();
+      User user = null;
+
+      // user = (User) session.get(User.class, (long)id);
+
+      //session.getTransaction().commit();
+
+
+
+      try {
+         session.beginTransaction();
+
+         user = (User) session.get(User.class, id);
+
+         session.delete(user);
+
+         session.getTransaction().commit();
+      }
+      catch (HibernateException e) {
+
+         session.getTransaction().rollback();
+      }
+      System.out.println(user);
+      //session.delete(user);
+      //session.getTransaction().commit();
    }
 
 }

@@ -29,8 +29,22 @@ public class MainApp {
 
       userService.showUsers(users);
 
+      System.out.println("===============================================");
+
+
+      //
+      users = userService.listUsers();
+
+      userService.showUsers(users);
+
+      System.out.println("===============================================");
 
       userService.deleteUser(2);
+
+      //users = userService.listUsers();
+
+      //userService.showUsers(users);
+
 
 
 
