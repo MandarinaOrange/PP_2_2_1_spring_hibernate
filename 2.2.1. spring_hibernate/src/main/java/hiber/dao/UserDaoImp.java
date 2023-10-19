@@ -75,7 +75,7 @@ public class UserDaoImp implements UserDao {
    @Override
    public void deleteUser(int id) {
 
-      Query deleteQuery = sessionFactory.getCurrentSession().createQuery("delete from User where id =:" + id).setParameter(id, id);
+      Query deleteQuery = sessionFactory.getCurrentSession().createQuery("delete from User where id =:" + id).setParameter("id", id);
       deleteQuery.executeUpdate();
    }
 

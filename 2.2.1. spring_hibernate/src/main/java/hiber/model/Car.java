@@ -52,8 +52,7 @@ public class Car {
         if (o == null || getClass() != o.getClass()) return false;
 
         Car car = (Car) o;
-        if (this.model == car.model && this.series == car.series) return true;
+        return  (this.model.equals(car.model) && this.series.equals(car.series));
 
-        return false;
     }
 }

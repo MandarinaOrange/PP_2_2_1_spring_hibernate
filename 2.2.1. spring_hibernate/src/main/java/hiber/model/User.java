@@ -84,7 +84,18 @@ public class User {
       return firstName + ", " + lastName + "\n" + email + "\n" + car.toString();
    }
 
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
 
+      if (o == null || getClass() != o.getClass()) return false;
+
+      User user = (User) o;
+
+      if (this.firstName.equals(user.firstName) && this.getLastName().equals(user.getLastName()) &&
+      this.getEmail().equals(user.getEmail()) && this.getCar().equals(user.getCar())) return true;
+      return false;
+   }
 
 
 }
