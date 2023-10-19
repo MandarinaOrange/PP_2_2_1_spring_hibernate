@@ -1,7 +1,6 @@
 package hiber.model;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "users",schema = "spring_hiber")
@@ -92,9 +91,8 @@ public class User {
 
       User user = (User) o;
 
-      if (this.firstName.equals(user.firstName) && this.getLastName().equals(user.getLastName()) &&
-      this.getEmail().equals(user.getEmail()) && this.getCar().equals(user.getCar())) return true;
-      return false;
+      return  (this.firstName.equals(user.firstName) && this.getLastName().equals(user.getLastName()) &&
+      this.getEmail().equals(user.getEmail()) && this.getCar().equals(user.getCar()));
    }
 
 

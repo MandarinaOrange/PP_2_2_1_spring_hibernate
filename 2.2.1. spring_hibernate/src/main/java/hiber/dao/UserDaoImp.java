@@ -2,23 +2,29 @@ package hiber.dao;
 
 import hiber.model.Car;
 import hiber.model.User;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 @Repository
+@EnableTransactionManagement
+@Transactional
 public class UserDaoImp implements UserDao {
 
+   private final SessionFactory sessionFactory;
+
    @Autowired
-   private SessionFactory sessionFactory;
+   public UserDaoImp(SessionFactory sessionFactory) {
+      this.sessionFactory = sessionFactory;
+   }
 
    @Override
    public void add(User user) {
@@ -31,7 +37,6 @@ public class UserDaoImp implements UserDao {
    @SuppressWarnings("unchecked")
    public List<User> listUsers() {
       TypedQuery<User> query=sessionFactory.getCurrentSession().createQuery("from User");
-
       return query.getResultList();
    }
 
@@ -50,22 +55,21 @@ public class UserDaoImp implements UserDao {
 
 
          if (!findCarList.isEmpty()) {
-            //Car findCar = findCarList.get(0);
             foundUsers = new ArrayList<>();
             for (Car findCar : findCarList) {
 
-               List<User> ListUser = listUsers();
-               User FindUser = ListUser.stream()
+               List<User> listUser = listUsers();
+               User findUser = listUser.stream()
                        .filter(user -> user.getCar().equals(findCar))
                        .findAny()
                        .orElse(null);
 
-               foundUsers.add(FindUser);
+               foundUsers.add(findUser);
             }
             return foundUsers;
          }
 
-      session.getTransaction().commit();
+
 
       return foundUsers;
    }
@@ -82,32 +86,13 @@ public class UserDaoImp implements UserDao {
 
    @Override
    public void deleteUser(int id) {
-      Session session = sessionFactory.getCurrentSession();
 
       User user = null;
 
-      // user = (User) session.get(User.class, (long)id);
+      user =  sessionFactory.getCurrentSession().get(User.class, (long) id);
 
-      //session.getTransaction().commit();
+      sessionFactory.getCurrentSession().remove(user);
 
-
-
-      try {
-         session.beginTransaction();
-
-         user = (User) session.get(User.class, id);
-
-         session.delete(user);
-
-         session.getTransaction().commit();
-      }
-      catch (HibernateException e) {
-
-         session.getTransaction().rollback();
-      }
-      System.out.println(user);
-      //session.delete(user);
-      //session.getTransaction().commit();
    }
 
 }
